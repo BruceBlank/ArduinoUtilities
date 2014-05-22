@@ -2,10 +2,10 @@
 #include "ToggleButtons.h"
 
 // definition of the static values have to be done outside of the class
-bool CToggleButtons::m_value0 = false;
-bool CToggleButtons::m_value1 = false;
+int CToggleButtons::m_value0 = 0;
+int CToggleButtons::m_value1 = 0;
 
-CToggleButtons::CToggleButtons(int interruptID, bool initValue) : m_interruptID(interruptID)
+CToggleButtons::CToggleButtons(int interruptID, int initValue) : m_interruptID(interruptID)
 	{
 		if(m_interruptID == 0){
 			m_value0 = initValue;
@@ -20,29 +20,33 @@ CToggleButtons::CToggleButtons(int interruptID, bool initValue) : m_interruptID(
 
 	void CToggleButtons::interruptFunction0()
 	{
-		// toggle value
-		m_value0 = !m_value0;
+		// increase value
+		if(++m_value0 > 1){
+			m_value0 = 0;
+		}
 	}
 
 	void CToggleButtons::interruptFunction1()
 	{
-		// toggle value
-		m_value1 = !m_value1;
+		// increase value
+		if(++m_value1 > 1){
+			m_value1 = 0;
+		}
 	}
 
-	CToggleButtons &CToggleButtons::instance0(bool initValue)
+	CToggleButtons &CToggleButtons::instance0(int initValue)
 	{
 		static CToggleButtons instance(0, initValue);
 		return instance;
 	}
 
-	CToggleButtons &CToggleButtons::instance1(bool initValue)
+	CToggleButtons &CToggleButtons::instance1(int initValue)
 	{
 		static CToggleButtons instance(1, initValue);
 		return instance;
 	}
 
-	bool CToggleButtons::getValue()
+	int CToggleButtons::getValue()
 	{
 		if(m_interruptID ==0)
 			return m_value0;
