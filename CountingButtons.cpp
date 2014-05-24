@@ -20,6 +20,12 @@ CCountingButtons::CCountingButtons(int interruptID) : m_interruptID(interruptID)
 
 void CCountingButtons::interruptFunction0()
 {
+	// collect interrupts within a certain time frame
+	static unsigned long lasttime = 0;
+	if(millis()-lasttime < clickTimeFrame)
+		return;
+	lasttime = millis();
+
 	// increase value
 	if(++m_value0 > m_maxvalue0){
 		m_value0 = 0;
@@ -28,26 +34,29 @@ void CCountingButtons::interruptFunction0()
 
 void CCountingButtons::interruptFunction1()
 {
+	// collect interrupts within a certain time frame
+	static unsigned long lasttime = 0;
+	if(millis()-lasttime < clickTimeFrame)
+		return;
+	lasttime = millis();
+
 	// increase value
 	if(++m_value1 > m_maxvalue1){
 		m_value1 = 0;
 	}
 }
 
-void CCountingButtons::configButton0(unsigned int initValue, unsigned int maxValue)
+void CCountingButtons::configButton(unsigned int initValue, unsigned int maxValue)
 {
 	// set the static values, catching errors
-	m_maxvalue0 = (maxValue>0) ? maxValue : 1;
-	m_value0 = (initValue<=m_maxvalue0) ? initValue : 0 ;
+	if(m_interruptID == 0){
+		m_maxvalue0 = (maxValue>0) ? maxValue : 1;
+		m_value0 = (initValue<=m_maxvalue0) ? initValue : 0 ;
+	}else{
+		m_maxvalue1 = (maxValue>0) ? maxValue : 1;
+		m_value1 = (initValue<=m_maxvalue1) ? initValue : 0 ;
+	}
 }
-
-void CCountingButtons::configButton1(unsigned int initValue, unsigned int maxValue)
-{
-	// set the static values, catching errors
-	m_maxvalue1 = (maxValue>1) ? maxValue : 1;
-	m_value1 = (initValue<=m_maxvalue1) ? initValue : 0 ;
-}
-
 
 CCountingButtons &CCountingButtons::instance0()
 {

@@ -9,6 +9,8 @@ private:
 	static unsigned int m_maxvalue0;
 	static unsigned int m_maxvalue1;
 
+	static const unsigned long clickTimeFrame = 250;
+
 	// direct construction is private
 	CCountingButtons();
 	// copy construction is private
@@ -26,11 +28,7 @@ public:
 	// define the initial and maximum value of the button 0
 	// parameters have to be > 0 and maxValue >= initValue.
 	// method sets parameters to a reasonable value
-	static void configButton0(unsigned int initValue = 0, unsigned int maxValue = 1);
-	// define the initial and maximum value of the button 1
-	// parameters have to be > 0 and maxValue >= initValue.
-	// method sets parameters to a reasonable value
-	static void configButton1(unsigned int initValue = 0, unsigned int maxValue = 1);
+	void configButton(unsigned int initValue = 0, unsigned int maxValue = 1);
 
 	// get instance for button with interrupt-ID 0 (PIN 2)
 	static CCountingButtons &instance0();
